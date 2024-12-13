@@ -31,6 +31,27 @@ const Whiteboard = () => {
     }
   }, []);
 
+  /**
+   * exportPdfBtn.addEventListener('click', async () => {
+            const pdfDoc = await PDFLib.PDFDocument.create();
+            const page = pdfDoc.addPage([canvas.width, canvas.height]);
+            const canvasImg = await pdfDoc.embedPng(canvas.toDataURL({ format: 'png' }));
+            const { width, height } = canvasImg.scale(0.5);
+            page.drawImage(canvasImg, {
+                x: 0,
+                y: 0,
+                width,
+                height,
+            });
+            const pdfBytes = await pdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'canvas_image.pdf';
+            link.click();
+        });
+   */
+
   return (
     <div
       ref={containerRef}
