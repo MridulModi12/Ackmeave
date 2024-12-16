@@ -3,8 +3,8 @@ services:
     name: ackmeave-server
     env: node
     plan: free
-    buildCommand: "npm install"
-    startCommand: "node server.js"
+    buildCommand: "cd src/server && npm install"
+    startCommand: "node src/server/server.js"
     envVars:
       - key: NODE_ENV
         value: production
