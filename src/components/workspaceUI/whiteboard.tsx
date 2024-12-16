@@ -5,18 +5,18 @@ import { Canvas, Path, Rect, Circle, IText } from "fabric";
 import Tools from "./tools/tools";
 import io from "socket.io-client";
 
-const server = "http://10.5.91.55:3001/";
+const server = "https://ackmeave.onrender.com";
 const socket = io(server);
 
 const Whiteboard = () => {
-  const canvasRef = useRef(null);
-  const containerRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [canvas, setCanvas] = useState<Canvas | null>(null);
 
   useEffect(() => {
     const parent = containerRef.current;
 
-    if (parent) {
+    if (parent && canvasRef.current) {
       const width = parent.offsetWidth;
       const height = parent.offsetHeight;
 
