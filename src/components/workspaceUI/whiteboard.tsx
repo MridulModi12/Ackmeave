@@ -1,12 +1,16 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Canvas, Rect } from "fabric";
+import { Canvas, Path, Rect, Circle, IText } from "fabric";
 import Tools from "./tools/tools";
+import io from "socket.io-client";
+
+const server = "http://10.5.91.55:3001/";
+const socket = io(server);
 
 const Whiteboard = () => {
   const canvasRef = useRef(null);
-  const containerRef = useRef(null); // Reference to parent div -> to set canvas size dynamically as per parent size
+  const containerRef = useRef(null);
   const [canvas, setCanvas] = useState<Canvas | null>(null);
 
   useEffect(() => {
@@ -20,44 +24,107 @@ const Whiteboard = () => {
         width,
         height,
       });
-      //initCanvas.backgroundColor = "#fff";
-      initCanvas.renderAll();
+
       setCanvas(initCanvas);
 
-      // Cleanup
+      // Emit drawing data
+      initCanvas.on("path:created", (event) => {
+        const path = event.path.toObject();
+        console.log(path);
+        socket.emit("draw", { path });
+      });
+
+      initCanvas.on("object:added", (event) => {
+        const object = event.target;
+        console.log(object);
+        if (object) {
+          socket.emit("object-added", {
+            type: object.type,
+            properties: object.toObject(),
+          });
+        }
+      });
+
+      initCanvas.on("object:modified", (event) => {
+        console.log("object modified");
+        console.log(event);
+        const object = event.target;
+        if (object) {
+          socket.emit("object-modified", {
+            id: object.id,
+            properties: object.toObject(),
+          });
+        }
+      });
+
       return () => {
         initCanvas.dispose();
       };
     }
   }, []);
 
-  /**
-   * exportPdfBtn.addEventListener('click', async () => {
-            const pdfDoc = await PDFLib.PDFDocument.create();
-            const page = pdfDoc.addPage([canvas.width, canvas.height]);
-            const canvasImg = await pdfDoc.embedPng(canvas.toDataURL({ format: 'png' }));
-            const { width, height } = canvasImg.scale(0.5);
-            page.drawImage(canvasImg, {
-                x: 0,
-                y: 0,
-                width,
-                height,
-            });
-            const pdfBytes = await pdfDoc.save();
-            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'canvas_image.pdf';
-            link.click();
-        });
-   */
+  useEffect(() => {
+    // Listen for new shapes added by others
+    socket.on("new-add", (data) => {
+      if (canvas) {
+        let object;
+        if (data.type === "rectangle") {
+          object = new Rect(data.properties);
+        } else if (data.type === "circle") {
+          object = new Circle(data.properties);
+        } else if (data.type === "text") {
+          object = new IText(data.properties.text, data.properties);
+        }
+
+        if (object) {
+          canvas.add(object);
+          canvas.renderAll();
+        }
+      }
+    });
+
+    // Listen for object modifications
+    socket.on("modified", (data) => {
+      if (canvas) {
+        const object = canvas.getObjects().find((obj) => obj.id === data.id);
+        if (object) {
+          object.set(data.properties);
+          canvas.renderAll();
+        }
+      }
+    });
+    socket.on("remote-draw", (data) => {
+      if (canvas) {
+        const path = new Path(data.path.path, data.path);
+        canvas.add(path);
+        canvas.renderAll();
+      }
+    });
+
+    return () => {
+      socket.off("new-add");
+      socket.off("new-modification");
+    };
+  }, [canvas]);
+
+  useEffect(() => {
+    if (canvas) {
+      canvas.on("object:modified", (e) => {
+        if (e.target) {
+          socket.emit("object-modified", {
+            id: e.target.id, // Ensure each object has a unique ID
+            properties: e.target.toObject(),
+          });
+        }
+      });
+    }
+  }, [canvas]);
 
   return (
     <div
       ref={containerRef}
       className="w-full bg-zinc-800 h-[90vh] flex justify-center items-center rounded-xl"
     >
-      {/* This canvas is directly used by Fabric.js */}
       <canvas
         ref={canvasRef}
         style={{
@@ -65,7 +132,7 @@ const Whiteboard = () => {
           overflow: "hidden",
         }}
       />
-      <Tools canvas={canvas} /> {/* Floating toolbar */}
+      <Tools canvas={canvas} socket={socket} />
     </div>
   );
 };

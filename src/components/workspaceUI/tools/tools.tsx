@@ -7,8 +7,9 @@ import {
   TypeIcon,
   TypeOutline,
 } from "lucide-react";
+import { v4 as uuid } from "uuid";
 
-const Tools = ({ canvas }: { canvas: Canvas | null }) => {
+const Tools = ({ canvas, socket }: { canvas: Canvas | null; socket: any }) => {
   const [isDrawingMode, setDrawingMode] = useState(false);
 
   const toggleDrawingMode = () => {
@@ -50,6 +51,12 @@ const Tools = ({ canvas }: { canvas: Canvas | null }) => {
         strokeWidth: 3,
       });
       canvas.add(rect);
+      canvas.renderAll();
+      socket.emit("object-added", {
+        id: rect.id,
+        type: "rectangle",
+        properties: rect.toObject(),
+      });
     }
   };
 
