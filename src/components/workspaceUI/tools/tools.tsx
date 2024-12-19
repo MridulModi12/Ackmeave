@@ -1,6 +1,15 @@
-import { Canvas, Rect, PencilBrush, IText } from "fabric";
+import {
+  Canvas,
+  Rect,
+  PencilBrush,
+  IText,
+  Line,
+  Group,
+  Triangle,
+} from "fabric";
 import React, { useEffect, useState } from "react";
 import {
+  ArrowBigRight,
   Circle,
   Pencil,
   RectangleHorizontal,
@@ -60,6 +69,45 @@ const Tools = ({ canvas, socket }: { canvas: Canvas | null; socket: any }) => {
     }
   };
 
+  const addArrow = () => {
+    if (canvas) {
+      const line = new Line([50, 100, 200, 100], {
+        left: 100,
+        top: 100,
+        stroke: "white",
+        strokeWidth: 3,
+        selectable: false,
+      });
+
+      const triangle = new Triangle({
+        left: line.x2 + 50,
+        top: line.y2,
+        originX: "center",
+        originY: "center",
+        angle: 90,
+        width: 20,
+        height: 20,
+        fill: "white",
+        selectable: false,
+      });
+
+      const arrow = new Group([line, triangle], {
+        left: 100,
+        top: 100,
+        selectable: true,
+      });
+
+      canvas.add(arrow);
+      canvas.renderAll();
+
+      socket.emit("object-added", {
+        id: arrow.id,
+        type: "arrow",
+        properties: arrow.toObject(),
+      });
+    }
+  };
+
   const addText = () => {
     if (canvas) {
       console.log("Canvas is defined");
@@ -108,6 +156,9 @@ const Tools = ({ canvas, socket }: { canvas: Canvas | null; socket: any }) => {
         </div>
         <div onClick={addText} className="rounded-full border p-2">
           <TypeOutline size={15} strokeWidth={2} />
+        </div>
+        <div onClick={addArrow} className="rounded-full border p-2">
+          <ArrowBigRight size={15} strokeWidth={2} />
         </div>
       </div>
     </div>
