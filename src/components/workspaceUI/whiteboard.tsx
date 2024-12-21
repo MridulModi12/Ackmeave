@@ -1,17 +1,41 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Canvas, Path, Rect, Circle, IText } from "fabric";
+import { Canvas, Path, Rect, Circle, IText, Triangle, Group } from "fabric";
 import Tools from "./tools/tools";
 import io from "socket.io-client";
 
-const server = "https://ackmeave.onrender.com";
+const server = "http://localhost:3001";
 const socket = io(server);
+
+export class Cursor extends Group {
+  constructor(userId: string, username: string) {
+    const pointer = new Triangle({
+      width: 20,
+      height: 20,
+      fill: "#" + Math.floor(Math.random() * 16777215).toString(16),
+      left: 0,
+      top: 0,
+      angle: -50,
+    });
+
+    const label = new IText(username, {
+      fontSize: 12,
+      fill: "white",
+      left: 10,
+      top: 10,
+    });
+
+    super([pointer, label]);
+    this.id = userId;
+  }
+}
 
 const Whiteboard = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [canvas, setCanvas] = useState<Canvas | null>(null);
+  const cursors = useRef<Map<string, Cursor>>(new Map());
 
   useEffect(() => {
     const parent = containerRef.current;
@@ -118,6 +142,55 @@ const Whiteboard = () => {
         }
       });
     }
+  }, [canvas]);
+
+  useEffect(() => {
+    if (canvas) {
+      canvas.on("mouse:move", (event) => {
+        console.log("mouse moved");
+        const pointer = canvas.getPointer(event.e);
+        socket.emit("cursor:move", {
+          x: pointer.x,
+          y: pointer.y,
+          userId: socket.id,
+          username: "User", // You can replace this with actual username
+        });
+      });
+
+      socket.on("cursor:moved", (data) => {
+        console.log("cursor moved socket");
+        if (data.userId !== socket.id) {
+          let cursor = cursors.current.get(data.userId);
+
+          if (!cursor) {
+            cursor = new Cursor(data.userId, data.username);
+            cursors.current.set(data.userId, cursor);
+            canvas.add(cursor);
+          }
+
+          cursor.set({
+            left: data.x,
+            top: data.y,
+          });
+
+          canvas.renderAll();
+        }
+      });
+
+      socket.on("user:disconnected", (userId) => {
+        const cursor = cursors.current.get(userId);
+        if (cursor) {
+          canvas.remove(cursor);
+          cursors.current.delete(userId);
+          canvas.renderAll();
+        }
+      });
+    }
+
+    return () => {
+      socket.off("cursor:moved");
+      socket.off("user:disconnected");
+    };
   }, [canvas]);
 
   return (

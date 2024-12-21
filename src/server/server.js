@@ -31,6 +31,14 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
+
+  socket.on("cursor:move", (data) => {
+    socket.broadcast.emit("cursor:moved", data);
+  });
+
+  socket.on("disconnect", () => {
+    io.emit("user:disconnected", socket.id);
+  });
 });
 
 const PORT = process.env.PORT || 3001;
