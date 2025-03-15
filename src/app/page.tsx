@@ -1,9 +1,12 @@
 import React from "react";
+import Header from "./_components/Header";
+import Hero from "./_components/Hero";
 
 const page = () => {
   return (
-    <div className="flex justify-center items-center w-full h-full">
-      <div className="text-3xl">Landing page</div>
+    <div>
+      <Header />
+      <Hero />
     </div>
   );
 };
