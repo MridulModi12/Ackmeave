@@ -1,10 +1,17 @@
 import { LoginLink, RegisterLink } from '@kinde-oss/kinde-auth-nextjs'
-import React from 'react'
+import React, { useState } from 'react'
 
 function Header() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen)
+  }
+
   return (
     <header className="bg-transparent absolute w-full z-10">
-      <div className="mx-auto flex h-20 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-20 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Logo */}
         <a className="block text-yellow-300 hover:text-yellow-400 transition-colors" href="#">
           <span className="sr-only">Ackmeave</span>
           <svg className="h-8" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -15,82 +22,77 @@ function Header() {
           </svg>
         </a>
 
-        <div className="flex flex-1 items-center justify-end md:justify-between">
-          <nav aria-label="Global" className="hidden md:block">
-            <ul className="flex items-center gap-6 text-sm">
-              <li>
-                <a
-                  className="text-white font-medium transition hover:text-yellow-300"
-                  href="#"
-                >
-                  Features
-                </a>
-              </li>
+        {/* Sidebar Toggle Button */}
+        <button
+          className="block rounded-lg bg-indigo-700 border border-indigo-400 p-2.5 text-white transition hover:bg-indigo-600 md:hidden"
+          onClick={toggleSidebar}
+        >
+          <span className="sr-only">Toggle menu</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
 
-              <li>
-                <a
-                  className="text-white font-medium transition hover:text-yellow-300"
-                  href="#"
-                >
-                  Examples
-                </a>
-              </li>
+        {/* Desktop Buttons */}
+        <div className="hidden md:flex items-center gap-4">
+          <a
+            className="block rounded-lg bg-indigo-700 border border-indigo-400 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600 focus:outline-none focus:ring"
+            href="#"
+          >
+            <LoginLink>Login</LoginLink>
+          </a>
 
-              <li>
-                <a
-                  className="text-white font-medium transition hover:text-yellow-300"
-                  href="#"
-                >
-                  Pricing
-                </a>
-              </li>
-
-              <li>
-                <a
-                  className="text-white font-medium transition hover:text-yellow-300"
-                  href="#"
-                >
-                  Documentation
-                </a>
-              </li>
-            </ul>
-          </nav>
-
-          <div className="flex items-center gap-4">
-            <div className="sm:flex sm:gap-4">
-              <a
-                className="block rounded-lg bg-indigo-700 border border-indigo-400 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600 focus:outline-none focus:ring sm:w-auto"
-                href="#"
-              >
-                <LoginLink>Login</LoginLink>
-              </a>
-
-              <a
-                className="hidden rounded-lg bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-indigo-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 sm:block"
-                href="#"
-              >
-                <RegisterLink>Sign Up Free</RegisterLink>
-              </a>
-            </div>
-
-            <button
-              className="block rounded-lg bg-indigo-700 border border-indigo-400 p-2.5 text-white transition hover:bg-indigo-600 md:hidden"
-            >
-              <span className="sr-only">Toggle menu</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="size-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
+          <a
+            className="block rounded-lg bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-indigo-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            href="#"
+          >
+            <RegisterLink>Sign Up Free</RegisterLink>
+          </a>
         </div>
       </div>
+
+      {/* Sidebar */}
+      {isSidebarOpen && (
+        <div className="absolute top-0 right-0 w-64 h-screen bg-indigo-900 text-white p-6 z-20">
+          <button
+            className="absolute top-4 left-4 text-white"
+            onClick={toggleSidebar}
+          >
+            <span className="sr-only">Close menu</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="mt-8">
+            <a
+              className="block rounded-lg bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600 focus:outline-none focus:ring"
+              href="#"
+            >
+              <LoginLink>Login</LoginLink>
+            </a>
+            <a
+              className="block mt-4 rounded-lg bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-indigo-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              href="#"
+            >
+              <RegisterLink>Sign Up Free</RegisterLink>
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   )
 }
