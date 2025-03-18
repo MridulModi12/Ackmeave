@@ -1,5 +1,6 @@
 "use client"
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import Button from "@/components/Button";
+import { LogoutLink, useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import React, { useEffect } from "react";
 
 const page = () => {
@@ -11,7 +12,9 @@ const page = () => {
 
   return <div>
     dashboard
-    
+    <Button>
+      <LogoutLink>Logout</LogoutLink>
+    </Button>
     </div>;
 };
 
