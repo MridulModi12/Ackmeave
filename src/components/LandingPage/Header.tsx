@@ -1,3 +1,4 @@
+import { LoginLink, RegisterLink } from '@kinde-oss/kinde-auth-nextjs'
 import React from 'react'
 
 function Header() {
@@ -61,14 +62,14 @@ function Header() {
                 className="block rounded-lg bg-indigo-700 border border-indigo-400 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600 focus:outline-none focus:ring sm:w-auto"
                 href="#"
               >
-                Login
+                <LoginLink>Login</LoginLink>
               </a>
 
               <a
                 className="hidden rounded-lg bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-indigo-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 sm:block"
                 href="#"
               >
-                Sign Up Free
+                <RegisterLink>Sign Up Free</RegisterLink>
               </a>
             </div>
 
