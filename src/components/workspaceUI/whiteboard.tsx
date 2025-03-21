@@ -5,7 +5,7 @@ import { Canvas, Path, Rect, Circle, IText, Triangle, Group } from "fabric";
 import Tools from "./tools/tools";
 import io from "socket.io-client";
 
-const server = "http://localhost:3001";
+const server = "https://ackmeave.onrender.com";
 const socket = io(server);
 
 export class Cursor extends Group {
