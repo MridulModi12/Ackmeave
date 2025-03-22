@@ -1,11 +1,10 @@
 "use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import { Canvas, Path, Rect, Circle, IText, Triangle, Group } from "fabric";
 import Tools from "./tools/tools";
 import io from "socket.io-client";
 
-const server = "https://ackmeave.onrender.com";
+const server = "http://10.5.81.235:3001";
 const socket = io(server);
 
 export class Cursor extends Group {
