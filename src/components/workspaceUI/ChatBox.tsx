@@ -6,7 +6,7 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { X } from 'lucide-react';
 import io from "socket.io-client";
 
-const server = "http://10.5.81.235:3001";
+const server = "https://ackmeave-budh.onrender.com";
 const socket = io(server);
 
 interface Message {
@@ -85,12 +85,12 @@ const ChatBox = ({ roomId, onClose }: ChatBoxProps) => {
     console.log("Sending chat message:", messageData);
     socket.emit('send-chat-message', messageData);
     
-    setMessages(prev => [...prev, {
-      text: inputMessage,
-      username,
-      isCurrentUser: true,
-      timestamp: messageData.timestamp
-    }]);
+    // setMessages(prev => [...prev, {
+    //   text: inputMessage,
+    //   username,
+    //   isCurrentUser: true,
+    //   timestamp: messageData.timestamp
+    // }]);
     
     setInputMessage('');
   };
@@ -146,7 +146,7 @@ const ChatBox = ({ roomId, onClose }: ChatBoxProps) => {
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
             placeholder="Type a message..."
             className="flex-1 p-2 bg-zinc-800 border border-zinc-700 text-white rounded-l-md focus:outline-none"
           />

@@ -3,8 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { Canvas, Path, Rect, Circle, IText, Triangle, Group } from "fabric";
 import Tools from "./tools/tools";
 import io from "socket.io-client";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
-const server = "http://10.5.81.235:3001";
+
+const server = "https://ackmeave-budh.onrender.com";
 const socket = io(server);
 
 export class Cursor extends Group {
@@ -35,6 +37,7 @@ const Whiteboard = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [canvas, setCanvas] = useState<Canvas | null>(null);
   const cursors = useRef<Map<string, Cursor>>(new Map());
+  const { user ,isLoading} = useKindeBrowserClient();
 
   useEffect(() => {
     const parent = containerRef.current;
@@ -144,17 +147,21 @@ const Whiteboard = () => {
   }, [canvas]);
 
   useEffect(() => {
-    if (canvas) {
+    if (canvas&&user&&!isLoading) {
       canvas.on("mouse:move", (event) => {
-        console.log("mouse moved");
-        const pointer = canvas.getPointer(event.e);
+        console.log("mouse moved ")
+        console.log("user data",user );
+        const pointer = canvas.getScenePoint(event.e);
         socket.emit("cursor:move", {
           x: pointer.x,
           y: pointer.y,
           userId: socket.id,
-          username: "User", // You can replace this with actual username
+          username: user?.given_name || user?.family_name || user?.email || "Guest", // You can replace this with actual username
         });
       });
+
+    
+      
 
       socket.on("cursor:moved", (data) => {
         console.log("cursor moved socket");
@@ -187,10 +194,11 @@ const Whiteboard = () => {
     }
 
     return () => {
+      
       socket.off("cursor:moved");
       socket.off("user:disconnected");
     };
-  }, [canvas]);
+  }, [canvas,user, isLoading]);
 
   return (
     <div

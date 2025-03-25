@@ -1,4 +1,4 @@
-// src/components/workspaceUI/ChatIcon.tsx
+
 "use client";
 
 import { useState } from 'react';
