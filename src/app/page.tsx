@@ -1,9 +1,14 @@
-import React from "react";
+"use client"
+import React, { useEffect } from "react";
+import Header from "@/components/LandingPage/Header";
+import Hero from "@/components/LandingPage/Hero";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const page = () => {
   return (
-    <div className="flex justify-center items-center w-full h-full">
-      <div className="text-3xl">Landing page</div>
+    <div>
+      <Header />
+      <Hero />
     </div>
   );
 };

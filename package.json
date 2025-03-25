@@ -1,23 +1,26 @@
 {
-  "name": "ackmeave",
+  "name": "ackmeave-ai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@kinde-oss/kinde-auth-nextjs": "^2.5.3",
     "fabric": "^6.5.3",
     "lucide-react": "^0.468.0",
     "next": "15.0.3",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "socket.io-client": "^4.8.1",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@prisma/client": "^6.5.0",
     "@types/fabric": "^5.3.9",
     "@types/node": "^20",
     "@types/react": "^18",
@@ -25,6 +28,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
+    "prisma": "^6.5.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
