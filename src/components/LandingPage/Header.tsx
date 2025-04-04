@@ -42,18 +42,16 @@ function Header() {
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-4">
-          <a
-            className="block rounded-lg bg-indigo-700 border border-indigo-400 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600 focus:outline-none focus:ring"
-            href="#"
-          >
-            <LoginLink>Login</LoginLink>
+          <a>
+            <LoginLink className='block rounded-lg bg-indigo-700 border border-indigo-400 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600 focus:outline-none focus:ring'>
+              Login
+            </LoginLink>
           </a>
 
-          <a
-            className="block rounded-lg bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-indigo-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            href="#"
-          >
-            <RegisterLink>Sign Up Free</RegisterLink>
+          <a>
+            <RegisterLink className="block rounded-lg bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-indigo-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+              Sign Up Free
+            </RegisterLink>
           </a>
         </div>
       </div>
@@ -78,18 +76,13 @@ function Header() {
             </svg>
           </button>
           <div className="mt-8">
-            <a
-              className="block rounded-lg bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600 focus:outline-none focus:ring"
-              href="#"
-            >
-              <LoginLink>Login</LoginLink>
-            </a>
-            <a
-              className="block mt-4 rounded-lg bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-indigo-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              href="#"
-            >
-              <RegisterLink>Sign Up Free</RegisterLink>
-            </a>
+            <LoginLink className="block rounded-lg bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600 focus:outline-none focus:ring">
+              Login
+            </LoginLink>
+            
+            <RegisterLink className="block mt-4 rounded-lg bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-indigo-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+              Sign Up Free
+            </RegisterLink>
           </div>
         </div>
       )}

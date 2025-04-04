@@ -20,7 +20,7 @@ const ShareButton = () => {
 
   return (
     <div className="flex items-center cursor-pointer" onClick={copyToClipboard}>
-      <div>Share Icon</div>
+      <div>Share</div>
       {copied && <span className="ml-2 text-green-500 text-sm">Copied!</span>}
     </div>
   );
